@@ -153,7 +153,10 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
         return NO;
     }
     status = SecKeychainItemDelete(itemRef);
-    if (status) { return NO; }
+    if (status) {
+        if (error) { *error = [self _errorWithStatus:status]; }
+        return NO;
+    }
     return YES;
 }
 
@@ -192,7 +195,10 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
         return NO; 
     }
     OSStatus status = SecKeychainAddGenericPassword(NULL, [name length], [name UTF8String], [account length], [account UTF8String], [password length], [password UTF8String], NULL);
-    if (status) { return NO; }
+    if (status) {
+        if (error) { *error = [self _errorWithStatus:status]; }
+        return NO;
+    }
     return YES;
 }
 
@@ -207,7 +213,10 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
     SecKeychainItemRef itemRef = [self itemRefForAccount:account serviceName:name error:error];
     if (itemRef == NULL) { return NO; }
     OSStatus status = SecKeychainItemModifyAttributesAndData(itemRef, NULL, [password length], [password UTF8String]);
-    if (status) { return NO; }
+    if (status) {
+        if (error) { *error = [self _errorWithStatus:status]; }
+        return NO;
+    }
     return YES;
 }
 #endif
