@@ -130,7 +130,7 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
         return nil; 
     }
     SecKeychainItemRef itemRef;
-    OSStatus status = SecKeychainFindGenericPassword(NULL, [name length], [name UTF8String], [account length], [account UTF8String], NULL, NULL, &itemRef);
+    OSStatus status = SecKeychainFindGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], NULL, NULL, &itemRef);
     if (status) {
         if (error) { *error = [self _errorWithStatus:status]; }
         return NULL;
@@ -147,7 +147,7 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
         return NO;
     }
     SecKeychainItemRef itemRef;
-    OSStatus status = SecKeychainFindGenericPassword(NULL, [name length], [name UTF8String], [account length], [account UTF8String], NULL, NULL, &itemRef);
+    OSStatus status = SecKeychainFindGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], NULL, NULL, &itemRef);
     if (status && error) {
         *error = [self _errorWithStatus:status];
         return NO;
@@ -170,7 +170,7 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
     }
     void *passwordData = NULL;
     UInt32 passwordLength = 0;
-    OSStatus status = SecKeychainFindGenericPassword(NULL, [name length], [name UTF8String], [account length], [account UTF8String], &passwordLength, &passwordData, NULL);
+    OSStatus status = SecKeychainFindGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], &passwordLength, &passwordData, NULL);
     if (status) {
         if (error) { *error = [self _errorWithStatus:status]; }
         return nil;
@@ -194,7 +194,7 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
         }
         return NO; 
     }
-    OSStatus status = SecKeychainAddGenericPassword(NULL, [name length], [name UTF8String], [account length], [account UTF8String], [password length], [password UTF8String], NULL);
+    OSStatus status = SecKeychainAddGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], (UInt32)[password length], [password UTF8String], NULL);
     if (status) {
         if (error) { *error = [self _errorWithStatus:status]; }
         return NO;
@@ -212,7 +212,7 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
     }
     SecKeychainItemRef itemRef = [self itemRefForAccount:account serviceName:name error:error];
     if (itemRef == NULL) { return NO; }
-    OSStatus status = SecKeychainItemModifyAttributesAndData(itemRef, NULL, [password length], [password UTF8String]);
+    OSStatus status = SecKeychainItemModifyAttributesAndData(itemRef, NULL, (UInt32)[password length], [password UTF8String]);
     if (status) {
         if (error) { *error = [self _errorWithStatus:status]; }
         return NO;
