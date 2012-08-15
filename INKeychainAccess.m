@@ -36,12 +36,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (NSString*)passwordForAccount:(NSString*)account serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !name) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return nil; 
-    }
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:name, kSecAttrService, account, kSecAttrAccount, kSecClassGenericPassword, kSecClass, kCFBooleanTrue, kSecReturnData, nil];
     CFDataRef passwordData = NULL;
     OSStatus status = SecItemCopyMatching((CFDictionaryRef)query, (CFTypeRef*)&passwordData);
@@ -58,12 +52,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (BOOL)setPassword:(NSString*)password forAccount:(NSString*)account serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !name || !password) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return NO;
-    }
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:name, kSecAttrService, account, kSecAttrAccount, kSecClassGenericPassword, kSecClass, nil];
     NSDictionary *updated = [NSDictionary dictionaryWithObjectsAndKeys:[password dataUsingEncoding:NSUTF8StringEncoding], kSecValueData, nil];
     OSStatus status = SecItemUpdate((CFDictionaryRef)query, (CFDictionaryRef)updated);
@@ -78,12 +66,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (BOOL)addKeychainItemForAccount:(NSString*)account withPassword:(NSString*)password serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !name || !password) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return NO;
-    }
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:name, kSecAttrService, account, kSecAttrAccount, kSecClassGenericPassword, kSecClass,  [password dataUsingEncoding:NSUTF8StringEncoding], kSecValueData, nil];
     OSStatus status = SecItemAdd((CFDictionaryRef)query, NULL);
     if (status) { 
@@ -97,12 +79,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (BOOL)removeKeychainItemForAccount:(NSString*)account serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !name) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return NO;
-    }
     NSDictionary *query = [NSDictionary dictionaryWithObjectsAndKeys:name, kSecAttrService, account, kSecAttrAccount, kSecClassGenericPassword, kSecClass, nil];
     OSStatus status = SecItemDelete((CFDictionaryRef)query);
     if (status) {
@@ -140,12 +116,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (BOOL)removeKeychainItemForAccount:(NSString*)account serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !name) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return NO;
-    }
     SecKeychainItemRef itemRef;
     OSStatus status = SecKeychainFindGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], NULL, NULL, &itemRef);
     if (status && error) {
@@ -162,12 +132,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (NSString*)passwordForAccount:(NSString*)account serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !name) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return nil; 
-    }
     void *passwordData = NULL;
     UInt32 passwordLength = 0;
     OSStatus status = SecKeychainFindGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], &passwordLength, &passwordData, NULL);
@@ -188,12 +152,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (BOOL)addKeychainItemForAccount:(NSString*)account withPassword:(NSString*)password serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !password || !name) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return NO; 
-    }
     OSStatus status = SecKeychainAddGenericPassword(NULL, (UInt32)[name length], [name UTF8String], (UInt32)[account length], [account UTF8String], (UInt32)[password length], [password UTF8String], NULL);
     if (status) {
         if (error) { *error = [self _errorWithStatus:status]; }
@@ -204,12 +162,6 @@ static NSString* const kKeychainAccessErrorDomain = @"INKeychainAccessErrorDomai
 
 + (BOOL)setPassword:(NSString*)password forAccount:(NSString*)account serviceName:(NSString*)name error:(NSError**)error
 {
-    if (!account || !password || !name) { 
-        if (error) {
-            *error = [self _errorWithMessage:[NSString stringWithFormat:@"Invalid arguments to method %@", NSStringFromSelector(_cmd)]];
-        }
-        return NO; 
-    }
     SecKeychainItemRef itemRef = [self itemRefForAccount:account serviceName:name error:error];
     if (itemRef == NULL) { return NO; }
     OSStatus status = SecKeychainItemModifyAttributesAndData(itemRef, NULL, (UInt32)[password length], [password UTF8String]);
