@@ -1,4 +1,9 @@
-## INKeychainAccess
+## This code is deprecated
+
+**INKeychainAccess is deprecated and will not be maintained anymore. You should not use this code going forward.** My official recommended alternative is [SSKeychain](https://github.com/samsoffes/sskeychain) by Sam Soffes, which is also an iOS/OS X Keychain wrapper but is far better in many areas like error handling.
+
+
+## ~~INKeychainAccess~~
 
 `INKeychainAccess` is a simple Objective-C wrapper around Keychain Services on both Mac OS X and iOS. This code maintains a consistent API across both platforms.
 
